@@ -1,0 +1,402 @@
+/* ================================================
+   KUHIRO — Premium Player
+   ================================================ */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --accent:     #f97316;
+  --accent2:    #e11d48;
+  --glow:       rgba(249,115,22,0.35);
+  --bg:         #080311;
+  --glass:      rgba(8,3,20,0.78);
+  --glassb:     rgba(255,255,255,0.055);
+  --border:     rgba(255,255,255,0.08);
+  --border-hi:  rgba(255,255,255,0.13);
+  --text:       #fff;
+  --dim:        rgba(255,255,255,0.52);
+  --faint:      rgba(255,255,255,0.26);
+  --player-h:   96px;
+  --topbar-h:   56px;
+}
+
+html, body { width:100%; height:100%; overflow:hidden;
+  font-family:'Space Grotesk',sans-serif; color:var(--text); background:var(--bg);
+  font-size: 16px;
+}
+
+/* Scale everything up one notch uniformly.
+   Change this one value to resize the whole UI. */
+html { zoom: 1.15; }
+
+::-webkit-scrollbar { width:3px; }
+::-webkit-scrollbar-thumb { background:rgba(249,115,22,0.3); border-radius:2px; }
+
+#yt-player-wrapper { position:fixed; bottom:-400px; left:-400px;
+  width:2px; height:2px; opacity:0; pointer-events:none; z-index:-1; }
+
+/* ── TOPBAR ── */
+.topbar {
+  position:fixed; top:0; left:0; right:0; height:var(--topbar-h);
+  z-index:200;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 28px;
+  background:linear-gradient(180deg,rgba(6,2,15,0.96) 0%,transparent 100%);
+}
+
+.logo {
+  font-size:20px; font-weight:700; letter-spacing:8px;
+  display:flex; align-items:center; user-select:none;
+}
+.logo span { transition:text-shadow 0.3s; }
+.logo-u,.logo-r { color:var(--accent); text-shadow:0 0 12px var(--glow); }
+.logo:hover .logo-u,
+.logo:hover .logo-r { text-shadow:0 0 24px var(--glow),0 0 48px var(--glow); }
+
+.top-meta { display:flex; align-items:center; gap:14px; }
+
+/* Live pill */
+.live-users-pill {
+  display:flex; align-items:center; gap:7px;
+  background:rgba(239,68,68,0.09); border:1px solid rgba(239,68,68,0.2);
+  border-radius:100px; padding:4px 11px 4px 9px; position:relative;
+}
+.pulse-ring {
+  position:absolute; left:9px; width:8px; height:8px; border-radius:50%;
+  border:1.5px solid rgba(239,68,68,0.45);
+  animation:pulse-ring 1.8s ease-out infinite;
+}
+.pulse-dot {
+  width:6px; height:6px; border-radius:50%; background:#ef4444;
+  box-shadow:0 0 5px rgba(239,68,68,0.8); flex-shrink:0; margin-left:3px;
+  animation:pulse-dot 1.8s ease-in-out infinite;
+}
+.live-count { font-size:12px; font-weight:700; min-width:20px; font-variant-numeric:tabular-nums; }
+.live-label { font-size:9px; color:rgba(239,68,68,0.78); letter-spacing:0.5px; text-transform:uppercase; }
+@keyframes pulse-ring { 0%{transform:scale(.8);opacity:1} 80%{transform:scale(2.3);opacity:0} 100%{opacity:0} }
+@keyframes pulse-dot { 0%,100%{box-shadow:0 0 5px rgba(239,68,68,.8)} 50%{box-shadow:0 0 12px rgba(239,68,68,1)} }
+
+/* Clock */
+.clock-block { display:flex; align-items:baseline; gap:4px; }
+.clock-time { font-size:18px; font-weight:700; letter-spacing:1.5px;
+  font-variant-numeric:tabular-nums; text-shadow:0 0 14px rgba(249,115,22,0.3); }
+.clock-period { font-size:9px; color:var(--accent); font-weight:600; letter-spacing:1px; }
+.clock-date { font-size:9px; color:var(--dim); padding-left:6px; border-left:1px solid var(--border); }
+
+.btn-ghost {
+  display:flex; align-items:center; gap:5px;
+  background:var(--glassb); border:1px solid var(--border);
+  color:var(--dim); padding:5px 12px; border-radius:100px;
+  font-size:11px; font-family:inherit; cursor:pointer; transition:all 0.2s;
+}
+.btn-ghost:hover { background:rgba(249,115,22,0.1); border-color:rgba(249,115,22,0.3); color:#fff; }
+
+/* ── HERO ── */
+.hero { position:fixed; inset:0; overflow:hidden; }
+.hero-bg { position:absolute; inset:0; }
+
+.hero-img {
+  width:100%; height:100%; object-fit:cover; object-position:center 30%;
+  transform:scale(1.06);
+  animation:slowzoom 40s ease-in-out infinite alternate;
+  filter:saturate(1.05) brightness(0.78);
+}
+@keyframes slowzoom {
+  from{transform:scale(1.06)} to{transform:scale(1.11) translateX(-0.5%)}
+}
+
+.hero-overlay {
+  position:absolute; inset:0;
+  background:
+    linear-gradient(to right, rgba(6,2,15,0.88) 0%, rgba(6,2,15,0.3) 52%, rgba(6,2,15,0.06) 100%),
+    linear-gradient(to top,   rgba(4,1,11,0.98) 0%, rgba(4,1,11,0.4) 18%, transparent 50%),
+    linear-gradient(to bottom,rgba(4,1,11,0.7)  0%, transparent 16%);
+}
+
+.grain {
+  position:absolute; inset:0; pointer-events:none; z-index:2; opacity:0.022;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:180px;
+}
+
+.hero-content {
+  position:absolute;
+  bottom:calc(var(--player-h) + 44px);
+  left:52px; z-index:10;
+}
+.location-tag {
+  display:inline-flex; align-items:center; gap:5px;
+  background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1);
+  backdrop-filter:blur(8px); border-radius:100px; padding:4px 12px;
+  font-size:10px; color:rgba(255,255,255,0.62); letter-spacing:0.3px; margin-bottom:14px;
+}
+.hero-title {
+  font-family:'Noto Sans Devanagari',sans-serif;
+  font-size:clamp(48px,6.8vw,96px);
+  font-weight:900; line-height:0.92; letter-spacing:-1px; color:#fff;
+  text-shadow:0 0 50px rgba(249,115,22,0.16),0 5px 24px rgba(0,0,0,0.5);
+  margin-bottom:12px;
+}
+.hero-sub {
+  font-size:11px; font-weight:300; color:rgba(255,255,255,0.38);
+  letter-spacing:2.5px; text-transform:uppercase;
+}
+
+
+
+/* ================================================
+   PILL PLAYER  — floating centered pill
+   Inspired by: circular art · title/progress · prev·play·next
+   ================================================ */
+
+/* Dock: bottom area that holds the pill, has a fade-out vignette */
+.player-dock {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: var(--player-h);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 18px;
+  pointer-events: none;
+  /* vignette so pill floats naturally over the image */
+  background: linear-gradient(to top, rgba(4,1,11,0.88) 0%, rgba(4,1,11,0.4) 70%, transparent 100%);
+}
+
+/* The pill itself */
+.player-pill {
+  pointer-events: all;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 68px;
+  padding: 0 18px 0 8px;
+  border-radius: 999px;
+  overflow: hidden;
+  min-width: 560px;
+  max-width: 720px;
+  /* base glass layer — color from pill-bg overlays this */
+  background: rgba(14, 6, 32, 0.72);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.55),
+    0 2px 8px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+/* Blurred color blob from album art — same technique as reference */
+.pill-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background: linear-gradient(120deg, rgba(140,40,20,0.55) 0%, rgba(80,20,60,0.4) 100%);
+  filter: blur(0px);
+  transition: background 0.8s ease;
+  border-radius: inherit;
+}
+
+/* everything inside sits above the bg blob */
+.player-pill > *:not(.pill-bg) { position: relative; z-index: 1; }
+
+/* ── Circular album art ── */
+.pill-art-wrap {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+  overflow: visible;
+}
+
+.pill-art-img {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: none;
+  position: absolute; inset: 0;
+  border: 2px solid rgba(255,255,255,0.15);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+}
+
+.pill-art-fallback {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(255,255,255,0.07);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.35);
+}
+
+/* Spinning ring around art when playing */
+.pill-art-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: rgba(249,115,22,0.7);
+  border-right-color: rgba(249,115,22,0.25);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.pill-art-ring.spinning {
+  opacity: 1;
+  animation: vinyl-spin 2s linear infinite;
+}
+@keyframes vinyl-spin { to { transform: rotate(360deg); } }
+
+/* ── Song info + progress ── */
+.pill-info {
+  flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;
+}
+
+.pill-title {
+  font-size: 13px; font-weight: 600; color: #fff;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.pill-artist {
+  font-size: 10px; color: rgba(255,255,255,0.55);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.pill-progress {
+  margin-top: 2px;
+}
+
+.pill-track {
+  width: 100%; height: 3px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 2px; cursor: pointer; position: relative;
+  transition: height 0.14s;
+}
+.pill-track:hover { height: 5px; }
+.pill-track:hover .pill-dot { opacity: 1; transform: translateY(-50%) scale(1); }
+
+.pill-fill {
+  height: 100%; width: 0%;
+  background: rgba(255,255,255,0.85);
+  border-radius: 2px;
+  transition: width 0.45s linear;
+}
+
+.pill-dot {
+  position: absolute; right: -4px; top: 50%;
+  transform: translateY(-50%) scale(0);
+  width: 9px; height: 9px; border-radius: 50%;
+  background: #fff;
+  opacity: 0; transition: all 0.14s;
+}
+
+.pill-times {
+  display: flex; justify-content: space-between;
+}
+.pill-time {
+  font-size: 9px; color: rgba(255,255,255,0.45);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Transport: prev · play · next ── */
+.pill-controls {
+  display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+}
+
+.pill-transport {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: none; border: none;
+  color: rgba(255,255,255,0.65); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.pill-transport:hover { color: #fff; background: rgba(255,255,255,0.1); }
+.pill-transport:active { transform: scale(0.9); }
+
+/* PLAY — white circle, exactly like the reference */
+.pill-play {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: #fff;
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: #111;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.pill-play:hover  { transform: scale(1.07); box-shadow: 0 4px 18px rgba(0,0,0,0.5); }
+.pill-play:active { transform: scale(0.94); }
+
+/* ── Aux: shuffle · repeat · vol ── */
+.pill-aux {
+  display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+  padding-left: 6px;
+  border-left: 1px solid rgba(255,255,255,0.1);
+}
+
+.pill-icon-btn {
+  width: 26px; height: 26px; border-radius: 6px;
+  background: none; border: none;
+  color: rgba(255,255,255,0.4); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.pill-icon-btn:hover  { color: rgba(255,255,255,0.85); }
+.pill-icon-btn.active { color: rgba(249,115,22,0.9); }
+
+.pill-vol {
+  -webkit-appearance: none; appearance: none;
+  width: 56px; height: 3px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 2px; outline: none; cursor: pointer;
+}
+.pill-vol::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: #fff; cursor: pointer;
+}
+
+/* ================================================
+   TOAST
+   ================================================ */
+.toast {
+  position: fixed; bottom: calc(var(--player-h) + 10px);
+  left: 50%; transform: translateX(-50%) translateY(10px);
+  background: rgba(8,3,20,0.96); border: 1px solid rgba(249,115,22,0.18);
+  backdrop-filter: blur(12px);
+  color: #fff; padding: 7px 16px; border-radius: 100px; font-size: 11px;
+  opacity: 0; transition: all 0.22s; z-index: 999; pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ================================================
+   LOADING
+   ================================================ */
+.loading-overlay {
+  position: fixed; inset: 0; z-index: 9999; background: var(--bg);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+  transition: opacity 0.5s;
+}
+.loading-overlay.fade-out { opacity: 0; pointer-events: none; }
+.loading-logo { font-size: 32px; font-weight: 700; letter-spacing: 10px; animation: lpulse 2s ease-in-out infinite; }
+.loading-logo span { color: var(--accent); }
+@keyframes lpulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
+.loading-spinner {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid rgba(249,115,22,0.12); border-top-color: var(--accent);
+  animation: spin 0.75s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { font-size: 11px; color: var(--faint); letter-spacing: 1px; }
+
+/* ================================================
+   RESPONSIVE
+   ================================================ */
+@media (max-width: 640px) {
+  .player-pill { min-width: calc(100vw - 24px); padding: 0 12px 0 6px; gap: 10px; }
+  .pill-aux { display: none; }
+  .clock-date { display: none; }
+  .live-label { display: none; }
+  .hero-content { left: 20px; }
+  .hero-title { font-size: 44px; }
+  .playlist-panel { width: 100%; }
+}

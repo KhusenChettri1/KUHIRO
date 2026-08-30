@@ -1,0 +1,9 @@
+{
+  "name": "nepali-music-player",
+  "version": "1.0.0",
+  "description": "नेपाली संगीत - पहाडी धुन | Nepali Music Player",
+  "scripts": {
+    "start": "npx serve . -l 3000",
+    "serve": "npx serve . -l 3000"
+  }
+}

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KUHIRO — गीतसँगै एउटा यात्रा</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    // Fix: file:// opens at OS zoom, localhost opens at 100%.
+    // Apply devicePixelRatio on localhost to match file:// appearance.
+    // The CSS already adds zoom:1.15, so we multiply on top of that.
+    (function () {
+      if (location.protocol === 'file:') return;
+      var dpr = window.devicePixelRatio || 1;
+      if (dpr > 1) {
+        document.documentElement.style.zoom = dpr * 1.15;
+      }
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- Hidden YouTube Player -->
+  <div id="yt-player-wrapper"><div id="yt-player"></div></div>
+
+  <!-- ===== TOPBAR ===== -->
+  <header class="topbar">
+    <div class="logo">
+      <span class="logo-k">K</span><span class="logo-u">U</span><span class="logo-h">H</span><span class="logo-i">I</span><span class="logo-r">R</span><span class="logo-o">O</span>
+    </div>
+    <div class="top-meta">
+      <div class="live-users-pill">
+        <span class="pulse-ring"></span>
+        <span class="pulse-dot"></span>
+        <span id="live-count" class="live-count">0</span>
+        <span class="live-label">live</span>
+      </div>
+      <div class="clock-block">
+        <span id="clock-time" class="clock-time">00:00:00</span>
+        <span id="clock-period" class="clock-period">AM</span>
+        <span id="clock-date" class="clock-date">Sun, Aug 30</span>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <main class="hero">
+    <div class="hero-bg">
+      <img src="16f04e73-1f83-47b9-96be-81a22e9f73f3.png" alt="Sikkim" class="hero-img" />
+      <div class="hero-overlay"></div>
+      <div class="grain"></div>
+    </div>
+    <div class="hero-content">
+      <div class="location-tag">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        सिक्किम, भारत
+      </div>
+      <h1 class="hero-title">गीतसँगै<br/>एउटा यात्रा।</h1>
+      <p class="hero-sub">Music for the mountains. Made for the road.</p>
+    </div>
+  </main>
+
+  <!-- playlist panel removed -->
+  <div id="playlist-items" style="display:none"></div>
+
+  <!-- ===== PILL PLAYER ===== -->
+  <div class="player-dock">
+  <div class="player-pill">
+
+    <!-- Blurred bg color from album art -->
+    <div class="pill-bg" id="pill-bg"></div>
+
+    <!-- Left: circular art -->
+    <div class="pill-art-wrap">
+      <img id="thumb-img" src="" alt="" class="pill-art-img" />
+      <div class="pill-art-fallback" id="pill-art-fallback">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      </div>
+      <div class="pill-art-ring" id="art-ring"></div>
+    </div>
+
+    <!-- Middle: meta + progress -->
+    <div class="pill-info">
+      <div class="pill-title" id="song-title">Loading…</div>
+      <div class="pill-artist" id="song-artist">KUHIRO</div>
+      <div class="pill-progress">
+        <div class="pill-track" id="prog-track" onclick="seekTo(event)">
+          <div class="pill-fill" id="prog-fill"></div>
+          <div class="pill-dot" id="prog-thumb"></div>
+        </div>
+      </div>
+      <div class="pill-times">
+        <span id="time-cur" class="pill-time">0:00</span>
+        <span id="time-tot" class="pill-time pill-time-right">0:00</span>
+      </div>
+    </div>
+
+    <!-- Right: transport controls -->
+    <div class="pill-controls">
+      <button class="pill-btn pill-transport" onclick="prevSong()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6z"/><path d="M19 18L9 12l10-6v12z"/></svg>
+      </button>
+      <button class="pill-play" id="btn-play" onclick="togglePlay()">
+        <svg id="play-icon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg id="pause-icon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+      </button>
+      <button class="pill-btn pill-transport" onclick="nextSong()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 6h-2v12h2z"/><path d="M5 18l10-6L5 6v12z"/></svg>
+      </button>
+    </div>
+
+    <!-- Far right: aux controls -->
+    <div class="pill-aux">
+      <button class="pill-icon-btn" id="btn-shuffle" onclick="toggleShuffle()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+      </button>
+      <button class="pill-icon-btn" id="btn-repeat" onclick="toggleRepeat()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+      </button>
+      <button class="pill-icon-btn" onclick="toggleMute()">
+        <svg id="vol-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        <svg id="mute-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+      </button>
+      <input type="range" id="vol-slider" class="pill-vol" min="0" max="100" value="80" oninput="setVolume(this.value)" />
+    </div>
+
+    <!-- hidden elements JS still needs -->
+    <span id="cass-label-title" style="display:none">KUHIRO</span>
+    <span id="cur-idx"   style="display:none">1</span>
+    <span id="tot-songs" style="display:none">—</span>
+    <!-- hidden reel elements for JS compat -->
+    <span id="reel-left"  style="display:none"></span>
+    <span id="reel-right" style="display:none"></span>
+
+  </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script src="player.js"></script>
+</body>
+</html>
