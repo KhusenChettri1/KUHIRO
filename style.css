@@ -391,12 +391,176 @@ html { zoom: 1.0; }
 /* ================================================
    RESPONSIVE
    ================================================ */
-@media (max-width: 640px) {
-  .player-pill { min-width: calc(100vw - 24px); padding: 0 12px 0 6px; gap: 10px; }
-  .pill-aux { display: none; }
-  .clock-date { display: none; }
-  .live-label { display: none; }
-  .hero-content { left: 20px; }
-  .hero-title { font-size: 44px; }
-  .playlist-panel { width: 100%; }
+/* ================================================
+   MOBILE RESPONSIVE
+   ================================================ */
+
+@media (max-width: 768px) {
+
+  html {
+    zoom: 1 !important;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    height: 60px;
+    padding: 0 16px;
+  }
+
+  .logo {
+    font-size: 17px;
+    letter-spacing: 6px;
+  }
+
+  .top-meta {
+    gap: 7px;
+  }
+
+  .clock-date {
+    display: none;
+  }
+
+  .live-label {
+    display: none;
+  }
+
+  .clock-time {
+    font-size: 14px;
+  }
+
+
+  /* HERO IMAGE */
+  .hero-img {
+    object-position: center center;
+    transform: scale(1.02);
+  }
+
+
+  /* HERO CONTENT */
+  .hero-content {
+    left: 20px;
+    right: 20px;
+    bottom: calc(var(--player-h) + 35px);
+  }
+
+  .location-tag {
+    font-size: 9px;
+    padding: 4px 10px;
+    margin-bottom: 10px;
+  }
+
+  .hero-title {
+    font-size: clamp(42px, 13vw, 70px);
+    line-height: 1;
+    letter-spacing: -1px;
+    margin-bottom: 10px;
+  }
+
+  .hero-sub {
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    line-height: 1.6;
+  }
+
+
+  /* MUSIC PLAYER */
+  .player-dock {
+    height: 115px;
+    padding: 0 12px 15px;
+  }
+
+  .player-pill {
+    width: 100%;
+    min-width: 0 !important;
+    max-width: none;
+
+    height: auto;
+    min-height: 76px;
+
+    padding: 10px 12px;
+    gap: 9px;
+
+    border-radius: 24px;
+  }
+
+  .pill-art-wrap,
+  .pill-art-img,
+  .pill-art-fallback {
+    width: 48px;
+    height: 48px;
+  }
+
+  .pill-info {
+    min-width: 0;
+  }
+
+  .pill-title {
+    font-size: 12px;
+  }
+
+  .pill-artist {
+    font-size: 9px;
+  }
+
+  .pill-controls {
+    gap: 2px;
+  }
+
+  .pill-transport {
+    width: 27px;
+    height: 27px;
+  }
+
+  .pill-play {
+    width: 42px;
+    height: 42px;
+  }
+
+
+  /* HIDE EXTRA CONTROLS ON MOBILE */
+  .pill-aux {
+    display: none;
+  }
+
+  .playlist-panel {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+
+/* SMALL PHONES */
+@media (max-width: 380px) {
+
+  .hero-title {
+    font-size: 40px;
+  }
+
+  .pill-art-wrap,
+  .pill-art-img,
+  .pill-art-fallback {
+    width: 42px;
+    height: 42px;
+  }
+
+  .pill-transport {
+    width: 24px;
+    height: 24px;
+  }
+
+  .pill-play {
+    width: 38px;
+    height: 38px;
+  }
+
+  .logo {
+    font-size: 15px;
+    letter-spacing: 5px;
+  }
 }
